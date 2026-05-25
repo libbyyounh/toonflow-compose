@@ -12,15 +12,8 @@ services:
     volumes:
       - ./data:/app/data
       - ./logs:/app/logs
-    environment:
-      - NODE_ENV=${NODE_ENV:-production}
-      - PORT=${PORT:-10588}
-      - OSSURL=${OSSURL:-http://localhost:10588/}
-      - DATABASE_URL=${DATABASE_URL:-sqlite:///app/data/database.sqlite}
     env_file:
       - .env
-    depends_on:
-      - db
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:10588/health"]
       interval: 30s
