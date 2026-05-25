@@ -24,8 +24,3 @@ services:
 networks:
   app-network:
     external: true
-    name: app-network
-
-volumes:
-  toonflow-data:
-    driver: local
