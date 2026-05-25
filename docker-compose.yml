@@ -1,0 +1,38 @@
+version: '3.8'
+
+services:
+  toonflow:
+    image: toonflow:latest
+    container_name: toonflow-app
+    restart: unless-stopped
+    networks:
+      - app-network
+    ports:
+      - "${TOONFLOW_PORT:-10588}:10588"
+    volumes:
+      - ./data:/app/data
+      - ./logs:/app/logs
+    environment:
+      - NODE_ENV=${NODE_ENV:-production}
+      - PORT=${PORT:-10588}
+      - OSSURL=${OSSURL:-http://localhost:10588/}
+      - DATABASE_URL=${DATABASE_URL:-sqlite:///app/data/database.sqlite}
+    env_file:
+      - .env
+    depends_on:
+      - db
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:10588/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+
+networks:
+  app-network:
+    external: true
+    name: app-network
+
+volumes:
+  toonflow-data:
+    driver: local
